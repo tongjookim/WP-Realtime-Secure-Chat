@@ -1,0 +1,12 @@
+{
+    "name": "developer/wp-realtime-chat",
+    "description": "WordPress Realtime Secure Chat Plugin",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=7.4",
+        "firebase/php-jwt": "^6.10"
+    },
+    "autoload": {
+        "classmap": ["includes/"]
+    }
+}

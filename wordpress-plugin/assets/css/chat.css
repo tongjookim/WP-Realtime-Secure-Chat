@@ -1,0 +1,545 @@
+/* ============================================
+   WP Realtime Secure Chat - 채팅 UI 스타일
+   ============================================ */
+
+/* Reset & Base */
+#wprc-chat-app {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: #1a1a2e;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+#wprc-chat-app *, #wprc-chat-app *::before, #wprc-chat-app *::after {
+    box-sizing: inherit;
+}
+
+/* ---- 게스트 로그인 / 로그인 필요 ---- */
+.wprc-login-required, .wprc-guest-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: #f8f9fb;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.wprc-login-box {
+    text-align: center;
+    padding: 40px;
+    max-width: 360px;
+}
+
+.wprc-login-box h3 {
+    font-size: 20px;
+    margin: 0 0 8px;
+    color: #1a1a2e;
+}
+
+.wprc-login-box p {
+    color: #64748b;
+    margin: 0 0 20px;
+}
+
+.wprc-note {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 12px;
+}
+
+/* ---- 버튼 ---- */
+.wprc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    gap: 4px;
+}
+
+.wprc-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.wprc-btn-primary {
+    background: #4f46e5;
+    color: #fff;
+    border-color: #4f46e5;
+}
+
+.wprc-btn-primary:hover {
+    background: #4338ca;
+    border-color: #4338ca;
+}
+
+.wprc-btn-danger {
+    color: #dc2626;
+    border-color: #fca5a5;
+}
+
+.wprc-btn-danger:hover {
+    background: #fef2f2;
+}
+
+.wprc-btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+/* ---- 폼 ---- */
+.wprc-form-group {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.wprc-form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 4px;
+}
+
+.wprc-form-group input[type="text"],
+.wprc-form-group select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.wprc-form-group input[type="text"]:focus,
+.wprc-form-group select:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ---- 메인 레이아웃 ---- */
+.wprc-main {
+    display: flex;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ---- 사이드바 ---- */
+.wprc-sidebar {
+    width: 280px;
+    min-width: 280px;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fb;
+}
+
+.wprc-tabs {
+    display: flex;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0;
+    background: #fff;
+}
+
+.wprc-tab {
+    flex: 1;
+    padding: 10px 8px;
+    border: none;
+    background: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+}
+
+.wprc-tab:hover {
+    color: #475569;
+}
+
+.wprc-tab.active {
+    color: #4f46e5;
+    border-bottom-color: #4f46e5;
+}
+
+.wprc-tab-content {
+    display: none;
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.wprc-tab-content.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---- 방/사용자 목록 ---- */
+.wprc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.wprc-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.wprc-list li:hover {
+    background: #e8eaef;
+}
+
+.wprc-list li.active {
+    background: #e0e7ff;
+}
+
+.wprc-room-actions {
+    padding: 8px 4px;
+}
+
+.wprc-room-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.wprc-room-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.wprc-room-name {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wprc-room-meta {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+/* 접속자 목록 */
+.wprc-online-count {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.wprc-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.wprc-user-name {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.wprc-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.wprc-status-dot.online {
+    background: #22c55e;
+    box-shadow: 0 0 4px rgba(34, 197, 94, 0.4);
+}
+
+.wprc-status-dot.offline {
+    background: #d1d5db;
+}
+
+/* ---- 설정 패널 ---- */
+.wprc-settings-panel {
+    padding: 8px;
+}
+
+.wprc-security-notice {
+    margin-top: 16px;
+    padding: 12px;
+    background: #eff6ff;
+    border-radius: 8px;
+    border: 1px solid #bfdbfe;
+    font-size: 12px;
+    color: #1e40af;
+}
+
+.wprc-security-notice strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.wprc-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* ---- 채팅 영역 ---- */
+.wprc-chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.wprc-no-room {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.wprc-no-room-inner h3 {
+    font-size: 22px;
+    color: #475569;
+    margin: 0 0 8px;
+}
+
+/* 채팅 헤더 */
+.wprc-chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.wprc-chat-header h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.wprc-room-user-count {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.wprc-chat-header-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* 메시지 영역 */
+.wprc-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #fafbfc;
+}
+
+/* 개별 메시지 */
+.wprc-msg {
+    display: flex;
+    gap: 8px;
+    max-width: 75%;
+    animation: wprc-fadeIn 0.2s ease;
+}
+
+@keyframes wprc-fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.wprc-msg.wprc-msg-mine {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.wprc-msg-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.wprc-msg-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.wprc-msg-sender {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.wprc-msg-mine .wprc-msg-sender {
+    text-align: right;
+}
+
+.wprc-msg-bubble {
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: #e8eaef;
+    color: #1a1a2e;
+    font-size: 14px;
+    line-height: 1.45;
+    word-break: break-word;
+}
+
+.wprc-msg-mine .wprc-msg-bubble {
+    background: #4f46e5;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.wprc-msg:not(.wprc-msg-mine) .wprc-msg-bubble {
+    border-bottom-left-radius: 4px;
+}
+
+.wprc-msg-time {
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+.wprc-msg-mine .wprc-msg-time {
+    text-align: right;
+}
+
+/* 시스템 메시지 */
+.wprc-msg-system {
+    text-align: center;
+    font-size: 12px;
+    color: #94a3b8;
+    padding: 4px 0;
+    max-width: 100%;
+    align-self: center;
+}
+
+/* 타이핑 인디케이터 */
+.wprc-typing-indicator {
+    min-height: 18px;
+    padding: 0 16px;
+    font-size: 12px;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* 입력 영역 */
+.wprc-input-area {
+    border-top: 1px solid #e2e8f0;
+    background: #fff;
+}
+
+.wprc-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px;
+}
+
+.wprc-input-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+.wprc-input-row input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ---- 모달 ---- */
+.wprc-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.wprc-modal-content {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.wprc-modal-content h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+
+.wprc-modal-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+/* ---- 반응형 ---- */
+@media (max-width: 768px) {
+    .wprc-main {
+        flex-direction: column;
+    }
+
+    .wprc-sidebar {
+        width: 100%;
+        min-width: 100%;
+        max-height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .wprc-msg {
+        max-width: 90%;
+    }
+}

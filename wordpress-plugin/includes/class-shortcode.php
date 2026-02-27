@@ -21,13 +21,64 @@ class WPRC_Shortcode {
         $is_logged_in  = is_user_logged_in();
         $allow_guests  = get_option('wprc_allow_guests', true);
         $height        = intval($atts['height']);
+        $node_url      = rtrim(get_option('wprc_node_server_url', 'https://chat.swn.kr'), '/');
 
+        // ============================================================
+        // ✅ 에셋 강제 로드 (숏코드 실행 시점에 직접 로드 → 페이지빌더 호환)
+        // ============================================================
+        wp_enqueue_style(
+            'wprc-chat-style',
+            WPRC_PLUGIN_URL . 'assets/css/chat.css',
+            [],
+            WPRC_VERSION
+        );
+
+        wp_enqueue_script(
+            'socket-io-client',
+            $node_url . '/socket.io/socket.io.js',
+            [],
+            '4.7.0',
+            true
+        );
+
+        wp_enqueue_script(
+            'wprc-chat-client',
+            WPRC_PLUGIN_URL . 'assets/js/chat-client.js',
+            ['socket-io-client'],
+            WPRC_VERSION,
+            true
+        );
+
+        // JS 설정값 전달
+        $current_user = wp_get_current_user();
+        $token = '';
+        if ($is_logged_in && defined('WPRC_HAS_JWT_LIB') && WPRC_HAS_JWT_LIB) {
+            $token = $this->jwt_handler->generate_token($current_user);
+        }
+
+        wp_localize_script('wprc-chat-client', 'WPRC_Config', [
+            'nodeServerUrl' => $node_url,
+            'restUrl'       => rest_url('wprc/v1/'),
+            'nonce'         => wp_create_nonce('wp_rest'),
+            'isLoggedIn'    => $is_logged_in,
+            'userId'        => $is_logged_in ? $current_user->ID : 0,
+            'displayName'   => $is_logged_in ? $current_user->display_name : '',
+            'token'         => $token,
+            'allowGuests'   => (bool) $allow_guests,
+        ]);
+
+        // ============================================================
+        // HTML 출력
+        // ============================================================
         ob_start();
         ?>
-        <div id="wprc-chat-app" data-height="<?php echo $height; ?>">
+        <div id="wprc-chat-app" data-height="<?php echo $height; ?>" style="min-height:200px;">
+
+            <div id="wprc-connection-status" style="padding:12px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;margin-bottom:12px;font-size:13px;display:none;">
+                ⏳ 채팅 서버에 연결 중...
+            </div>
 
             <?php if (!$is_logged_in && !$allow_guests): ?>
-                <!-- 게스트 비허용 시 로그인 안내 -->
                 <div class="wprc-login-required">
                     <div class="wprc-login-box">
                         <h3>로그인이 필요합니다</h3>
@@ -37,7 +88,6 @@ class WPRC_Shortcode {
                 </div>
 
             <?php elseif (!$is_logged_in && $allow_guests): ?>
-                <!-- 게스트 닉네임 입력 폼 -->
                 <div id="wprc-guest-form" class="wprc-guest-form">
                     <div class="wprc-login-box">
                         <h3>채팅 참여</h3>
@@ -52,19 +102,14 @@ class WPRC_Shortcode {
                 </div>
             <?php endif; ?>
 
-            <!-- 메인 채팅 인터페이스 (JS에서 활성화) -->
             <div id="wprc-main" class="wprc-main" style="display:none; height:<?php echo $height; ?>px;">
-
-                <!-- 좌측 사이드바: 채팅방/친구 목록 -->
                 <aside id="wprc-sidebar" class="wprc-sidebar">
-                    <!-- 탭 네비게이션 -->
                     <div class="wprc-tabs">
                         <button class="wprc-tab active" data-tab="rooms">채팅방</button>
                         <button class="wprc-tab" data-tab="friends">접속자</button>
                         <button class="wprc-tab" data-tab="settings">설정</button>
                     </div>
 
-                    <!-- 채팅방 목록 -->
                     <div id="wprc-tab-rooms" class="wprc-tab-content active">
                         <div class="wprc-room-actions">
                             <button id="wprc-create-room" class="wprc-btn wprc-btn-sm">+ 새 채팅방</button>
@@ -72,7 +117,6 @@ class WPRC_Shortcode {
                         <ul id="wprc-room-list" class="wprc-list"></ul>
                     </div>
 
-                    <!-- 접속자(친구) 목록 -->
                     <div id="wprc-tab-friends" class="wprc-tab-content">
                         <div class="wprc-online-count">
                             접속자: <span id="wprc-online-count">0</span>명
@@ -80,7 +124,6 @@ class WPRC_Shortcode {
                         <ul id="wprc-user-list" class="wprc-list"></ul>
                     </div>
 
-                    <!-- 환경 설정 -->
                     <div id="wprc-tab-settings" class="wprc-tab-content">
                         <div class="wprc-settings-panel">
                             <div class="wprc-form-group">
@@ -103,9 +146,7 @@ class WPRC_Shortcode {
                     </div>
                 </aside>
 
-                <!-- 우측 채팅 영역 -->
                 <main id="wprc-chat-area" class="wprc-chat-area">
-                    <!-- 채팅방 미선택 시 -->
                     <div id="wprc-no-room" class="wprc-no-room">
                         <div class="wprc-no-room-inner">
                             <h3>🔒 보안 채팅</h3>
@@ -114,7 +155,6 @@ class WPRC_Shortcode {
                         </div>
                     </div>
 
-                    <!-- 채팅 헤더 -->
                     <div id="wprc-chat-header" class="wprc-chat-header" style="display:none;">
                         <div class="wprc-chat-header-info">
                             <h4 id="wprc-current-room-name"></h4>
@@ -126,10 +166,8 @@ class WPRC_Shortcode {
                         </div>
                     </div>
 
-                    <!-- 메시지 영역 -->
                     <div id="wprc-messages" class="wprc-messages"></div>
 
-                    <!-- 메시지 입력 -->
                     <div id="wprc-input-area" class="wprc-input-area" style="display:none;">
                         <div class="wprc-typing-indicator" id="wprc-typing"></div>
                         <div class="wprc-input-row">
@@ -141,7 +179,6 @@ class WPRC_Shortcode {
                 </main>
             </div>
 
-            <!-- 새 채팅방 생성 모달 -->
             <div id="wprc-modal-create-room" class="wprc-modal" style="display:none;">
                 <div class="wprc-modal-content">
                     <h3>새 채팅방 만들기</h3>
@@ -163,6 +200,24 @@ class WPRC_Shortcode {
                 </div>
             </div>
         </div>
+
+        <script>
+        (function() {
+            var statusEl = document.getElementById('wprc-connection-status');
+            setTimeout(function() {
+                if (typeof io === 'undefined') {
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.style.background = '#f8d7da';
+                        statusEl.style.borderColor = '#f5c6cb';
+                        statusEl.style.color = '#721c24';
+                        statusEl.innerHTML = '❌ 채팅 서버(<?php echo esc_js($node_url); ?>)에 연결할 수 없습니다.<br>' +
+                            '<small>서버가 실행 중인지 확인하세요.</small>';
+                    }
+                }
+            }, 3000);
+        })();
+        </script>
         <?php
         return ob_get_clean();
     }

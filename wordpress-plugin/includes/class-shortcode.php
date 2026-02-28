@@ -52,7 +52,10 @@ class WPRC_Shortcode {
         // JS 설정값 전달
         $current_user = wp_get_current_user();
         $token = '';
-        if ($is_logged_in && defined('WPRC_HAS_JWT_LIB') && WPRC_HAS_JWT_LIB) {
+        //if ($is_logged_in && defined('WPRC_HAS_JWT_LIB') && WPRC_HAS_JWT_LIB) {
+        //    $token = $this->jwt_handler->generate_token($current_user);
+        //}
+        if ($is_logged_in) {
             $token = $this->jwt_handler->generate_token($current_user);
         }
 

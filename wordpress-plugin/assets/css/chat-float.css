@@ -1,0 +1,102 @@
+/* ============================================================
+   플로팅 채팅 위젯
+   ============================================================ */
+#wprc-float-wrap {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+#wprc-float-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(109,40,217,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    flex-shrink: 0;
+}
+#wprc-float-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(109,40,217,0.55);
+}
+#wprc-float-btn:active { transform: scale(0.96); }
+
+/* 미읽 뱃지 */
+#wprc-float-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    background: #ef4444;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    padding: 0 5px;
+    border: 2px solid #fff;
+}
+
+/* 모달 컨테이너 */
+#wprc-float-modal {
+    width: 380px;
+    height: 620px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+    background: #fff;
+    animation: wprc-float-in 0.22s ease;
+    /* 모달 내부가 모바일 UI를 쓰므로 flex 레이아웃 */
+    display: flex;
+    flex-direction: column;
+}
+#wprc-float-modal .wprc-is-mobile {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0;
+}
+#wprc-float-modal .wprc-mobile-wrapper {
+    height: 100% !important;
+    min-height: 0;
+}
+/* 모달 내부 채팅 메시지 영역 스크롤 보장 */
+#wprc-float-modal .wprc-mob-messages-wrap {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+@keyframes wprc-float-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* 모바일: 모달이 전체화면 */
+@media (max-width: 480px) {
+    #wprc-float-wrap {
+        bottom: 16px;
+        right: 16px;
+    }
+    #wprc-float-modal {
+        position: fixed;
+        bottom: 0; right: 0; left: 0;
+        width: 100%;
+        height: 100dvh;
+        height: var(--wprc-vh, 100vh);
+        border-radius: 0;
+    }
+}

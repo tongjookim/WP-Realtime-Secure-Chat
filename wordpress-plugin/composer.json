@@ -8,5 +8,10 @@
     },
     "autoload": {
         "classmap": ["includes/"]
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
     }
 }
